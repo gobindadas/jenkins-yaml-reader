@@ -1,0 +1,89 @@
+project: 
+ actions: ""
+ description: ""
+ keepDependencies: false
+ properties: 
+  "com.sonyericsson.jenkins.plugins.bfa.model.ScannerJobProperty": 
+   doNotScan: false
+   _plugin: "build-failure-analyzer@1.11.0"
+  "com.coravy.hudson.plugins.github.GithubProjectProperty": 
+   projectUrl: "https://github.com/RLIndia/D4D/"
+   _plugin: "github@1.10"
+  "jenkins.plugins.slack.SlackNotifier_-SlackJobProperty": 
+   teamDomain: relevancelab
+   token: d6sfBAyLnLVC2tqAeKDocKQ0
+   room: catalyst
+   startNotification: false
+   notifySuccess: false
+   notifyAborted: false
+   notifyNotBuilt: false
+   notifyUnstable: false
+   notifyFailure: false
+   notifyBackToNormal: true
+   notifyRepeatedFailure: true
+   includeTestSummary: true
+   showCommitList: true
+   includeCustomMessage: false
+   customMessage: ""
+   _plugin: "slack@1.8.1"
+  "org.jvnet.hudson.plugins.shelveproject.ShelveProjectProperty": 
+   _plugin: "shelve-project-plugin@1.5"
+ scm: 
+  configVersion: 2
+  userRemoteConfigs: 
+   "hudson.plugins.git.UserRemoteConfig": 
+    url: "https://github.com/RLIndia/D4D"
+    credentialsId: "0760c2a6-fb73-4163-b4ae-0436fab1531f"
+  branches: 
+   "hudson.plugins.git.BranchSpec": 
+    name: "*/dev_catalyst"
+  doGenerateSubmoduleConfigurations: false
+  submoduleCfg: 
+   _class: list
+  extensions: ""
+  _class: "hudson.plugins.git.GitSCM"
+  _plugin: "git@2.4.0"
+ assignedNode: master
+ canRoam: false
+ disabled: false
+ blockBuildWhenDownstreamBuilding: false
+ blockBuildWhenUpstreamBuilding: false
+ triggers: ""
+ concurrentBuild: false
+ builders: 
+  "hudson.tasks.Shell": 
+   command: "#!/bin/bash\nshopt -s extglob\nrm -rf /var/lib/jenkins/jobs/Deploy_To_D4D_New/workspace/*\npwd\n\ncd $WORKSPACE\necho \"workspace\" $WORKSPACE\n#sudo chmod -R 777 ./client\n\n#sudo git remote rm origin\n#sudo git remote add origin https://catalyst-engg:catalyst_123@github.com/RLIndia/D4D.git\n\n#echo \"reseting all changes\"\n#sudo git reset --hard\n#echo \"Finish reseting all changes\"\n\n#sudo git pull origin dev_catalyst\n#sudo git checkout dev_catalyst\n\n#sudo git pull origin gobinda\n#sudo git checkout gobinda\n\nsudo git status\n#sudo chmod -R 777 version.json\n\nmonth=`date +\"%m\"`\necho \"{\\\"version\\\":\\\"2.$month.$BUILD_NUMBER\\\"}\" > $WORKSPACE/version.json\n#sudo git commit -m \"Updating jenkins version number\" -a\n\n#sudo git push origin dev_catalyst\n\necho \"Deploying Catalyst Now\"\ncd $WORKSPACE/server\nsudo rm -rf node_modules\nsudo node install --seed-data\ncd $WORKSPACE/server\necho \"Catalyst deployment is successful\"\n\nsudo killall node\necho \"Starting the server\"\n#if ['ps-ef|grp node'=0]\n#sudo forever stop app.js \nsleep 2\nsudo forever start app.js \nsleep 5\n\ntag=D4D_`date +\"%d_%B_%Y_%H_%M_%p\"`\nsudo git tag -a $tag -m \"Code pulled for D4D at $tag\"\nsudo git push --tags https://catalyst-engg:catalyst_123@github.com/RLIndia/D4D.git\n\n\n# Code for App Deploy history via jenkins\n# Author: \"Gobinda Das\"\n\nexitStatus=$?\nexport APPSTATUS\nif [ $exitStatus -eq 0 ]\nthen\n\techo \"Successfull\"\n\tAPPSTATUS=\"Successfull\"\nelse\n\techo \"Failure\"\n\tAPPSTATUS=\"Failure\"\nfi\necho $APPSTATUS\ncurrentMonth=`date +\"%m\"`\nexport APPVERSION=\"2.$currentMonth.$BUILD_NUMBER\"\necho $APPVERSION\nexport LASTDEPLOY=\"$(date +'%y-%m-%d %r')\"\necho $LASTDEPLOY\nexport IP=\"$(hostname -I)\"\nexport THISHOST=\"$(hostname)\"\nexport APPINSNAME=\"D4D\"\n\n# For D4d\n#curl -X POST -H \"Content-Type: application/json\" -d '{\"appDeployData\": {\"applicationName\": \"Catalyst\",\"applicationInstanceName\": \"'\"$APPINSNAME\"'\",\"applicationVersion\": \"'\"$APPVERSION\"'\",\"applicationNodeIP\": \"'\"$IP\"'\",\"applicationLastDeploy\": \"'\"$LASTDEPLOY\"'\",\"applicationStatus\": \"'\"$APPSTATUS\"'\",\"applicationType\": \"Package\",\"containerId\": \"\",\"hostName\": \"'\"$THISHOST\"'\",\"appLogs\": \"'\"http://jenkins.rlcatalyst.com/job/$JOB_NAME/$BUILD_NUMBER/console\"'\",\"envId\": \"QAEnv\"}}' http://d4d.rlcatalyst.com/app/deploy\n\n#For Supercatalyst\n#curl -X POST -H \"Content-Type: application/json\" -d '{\"appDeployData\": {\"applicationName\": \"Catalyst\",\"applicationInstanceName\": \"'\"$APPINSNAME\"'\",\"applicationVersion\": \"'\"$APPVERSION\"'\",\"applicationNodeIP\": \"'\"$IP\"'\",\"applicationLastDeploy\": \"'\"$LASTDEPLOY\"'\",\"applicationStatus\": \"'\"$APPSTATUS\"'\",\"applicationType\": \"Package\",\"containerId\": \"\",\"hostName\": \"'\"$THISHOST\"'\",\"appLogs\": \"'\"http://jenkins.rlcatalyst.com/job/$JOB_NAME/$BUILD_NUMBER/console\"'\",\"envId\": \"RL_QA\"}}' http://supercatalyst.relevancelab.com/app/deploy"
+ publishers: 
+  "hudson.plugins.emailext.ExtendedEmailPublisher": 
+   recipientList: "$DEFAULT_RECIPIENTS manaswinee.mohanty@relevancelab.com jagadeesh.manjunath@relevancelab.com adarsh.shivananda@relevancelab.com"
+   configuredTriggers: 
+    "hudson.plugins.emailext.plugins.trigger.FailureTrigger": 
+     email: 
+      recipientList: ""
+      subject: "$PROJECT_DEFAULT_SUBJECT"
+      body: "$PROJECT_DEFAULT_CONTENT"
+      recipientProviders: 
+       "hudson.plugins.emailext.plugins.recipients.ListRecipientProvider": ""
+      attachmentsPattern: ""
+      attachBuildLog: false
+      compressBuildLog: false
+      replyTo: "$PROJECT_DEFAULT_REPLYTO"
+      contentType: project
+   contentType: default
+   defaultSubject: "$DEFAULT_SUBJECT"
+   defaultContent: "$DEFAULT_CONTENT"
+   attachmentsPattern: ""
+   presendScript: "$DEFAULT_PRESEND_SCRIPT"
+   attachBuildLog: false
+   compressBuildLog: false
+   replyTo: "$DEFAULT_REPLYTO"
+   saveOutput: false
+   disabled: false
+   _plugin: "email-ext@2.39"
+  "jenkins.plugins.slack.SlackNotifier": 
+   teamDomain: relevancelab
+   authToken: d6sfBAyLnLVC2tqAeKDocKQ0
+   buildServerUrl: "jenkins.rlcatalyst.com/"
+   room: catalyst
+   _plugin: "slack@1.8.1"
+ buildWrappers: ""
