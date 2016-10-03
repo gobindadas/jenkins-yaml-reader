@@ -4,12 +4,12 @@ import jenkins.model.*
 
 Yaml yml = new Yaml()
 		def build = Thread.currentThread().executable
-		def configyaml=build.workspace.toString()+"\\data\\bluenode4.yaml"; 
+		def configyaml=build.workspace.toString()+"\\data\\" + jobname + ".yaml";		
 
 		InputStream istream =new FileInputStream( new File(configyaml));
 		def jobSettings= yml.load(istream);
 
-job('bluenode4') {	
+job('bluenode2') {	
     scm {
         git(jobSettings.giturl)
     }   

@@ -10,4 +10,4 @@ parameters :
  - type: string
    name: NBC_ARTIFACT
    value: CHANGEME
- mavenCMD: '-e clean test'
+ 
