@@ -9,7 +9,7 @@ Yaml yml = new Yaml()
 		InputStream istream =new FileInputStream( new File(configyaml));
 		def jobSettings= yml.load(istream);
 
-job('bluenode3') {	
+job('bluenode4') {	
     scm {
         git(jobSettings.giturl)
     }   
