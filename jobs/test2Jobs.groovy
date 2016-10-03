@@ -4,7 +4,7 @@ import jenkins.model.*
 
 Yaml yml = new Yaml()
 		def build = Thread.currentThread().executable
-		def configyaml=build.workspace.toString()+"\\data\\d4d.yaml"; 
+		def configyaml=build.workspace.toString()+"\\data\\bluenode4.yaml"; 
 
 		InputStream istream =new FileInputStream( new File(configyaml));
 		def jobSettings= yml.load(istream);
