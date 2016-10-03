@@ -1,0 +1,13 @@
+label : 'centos_7_0'
+giturl : 'git://github.com/quidryan/aws-sdk-test.git'
+parameters :
+ - type: string
+   name: NBC_APPNAME
+   value: CHANGEME
+ - type: string
+   name: NBC_BUILDID
+   value: CHANGEME
+ - type: string
+   name: NBC_ARTIFACT
+   value: CHANGEME
+ 
