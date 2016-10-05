@@ -1,6 +1,6 @@
 name: 'First-Job'
 description: 'Created by DSL Seed-Job'
-gitUrl : 'git://github.com/quidryan/aws-sdk-test.git'
+gitUrl : 'https://github.com/gobindadas/GroovyCore.git'
 parameters :
  - type: string
    name: NBC_APPNAME
