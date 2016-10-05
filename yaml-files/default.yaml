@@ -22,3 +22,4 @@ parameters :
 mavenCMD: 'clean install'
 shellCMD: 'sudo apt-get update'
 assignedNode: 'Supercatalyst'
+recipients: 'gobinda.das@relevancelab.com'
