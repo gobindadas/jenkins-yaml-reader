@@ -19,6 +19,7 @@ parameters :
    name: DEV
    value: true
    description: 'This job is for Dev build or not.'
+schedule: 'H/5 * * * *'
 mavenCMD: 'clean install'
 shellCMD: 'sudo apt-get update'
 assignedNode: 'Supercatalyst'
