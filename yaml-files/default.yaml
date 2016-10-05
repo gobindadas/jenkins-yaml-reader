@@ -4,23 +4,23 @@ gitUrl : 'https://github.com/gobindadas/GroovyCore.git'
 branchName: 'master'
 parameters :
  - type: string
-   name: NBC_APPNAME
-   value: CHANGEME
+   name: AppName
+   value: Change Me
    description: 'Application name'
  - type: string
-   name: NBC_BUILDID
-   value: CHANGEME
+   name: BuildId
+   value: Change Me
    description: 'Job build Id'
  - type: string
-   name: NBC_ARTIFACT
-   value: CHANGEME
+   name: Artifact
+   value: Change Me
    description: 'Application artifact Id'
  - type: boolean
-   name: DEV
+   name: Dev
    value: true
    description: 'This job is for Dev build or not.'
 schedule: 'H/5 * * * *'
 mavenCMD: 'clean install'
-shellCMD: 'sudo apt-get update'
-assignedNode: 'Supercatalyst'
+shellCMD: "pwd\n\ncd $WORKSPACE\n\n#sudo mkdir -p $WORKSPACE\n#cd $WORKSPACE\nsudo git branch\n#sudo git pull origin master\nsudo git status\n\n####Creating the version for Catlayst#####\nsudo rm -rf version.json\n# Create a version\n#month=`date +\"%m\"`\nsudo echo \"{\\\"version\\\":\\\"3.0.$BUILD_NUMBER\\\"}\" >> $WORKSPACE/version.json\n# Upgrade Supercatalyst UI\necho \"Deploying Catalyst UI code\"\ncd $WORKSPACE/client/cat3\n#sudo rm -rf node_modules\n#sleep 5\nsudo npm install --production\n#sudo npm start\nsudo npm run-script build-prod\n#####sudo grunt build-prod --v 9the source files are not exposed in prod)\necho \"Deploy Catalyst UI code complete\"\n\n# Upgrade Neorcatalyst server\n\necho \"Deploying Catalyst server\"\ncd $WORKSPACE/server\nsudo rm -rf node_modules\nsudo npm install\nsudo node install --db-name devops_new --catalyst-port 3021 \n\nif ps auxwww | grep -i \"node\" | grep -i \"$WORKSPACE/server/app/app.js\" > /dev/null\nthen\n    echo \"catalyst Running,restarting the service\"\n    sudo forever stop $WORKSPACE/server/app/app.js\nsleep 5\n    sudo forever start $WORKSPACE/server/app/app.js    \nelse\n    echo \"catalyst was not running, strating the service\"\n    sudo forever start $WORKSPACE/server/app/app.js \nfi\n\n\n\n"
+assignedNode: 'BuildServer'
 recipients: 'gobinda.das@relevancelab.com'
