@@ -12,5 +12,5 @@ parameters :
  - type: string
    name: NBC_ARTIFACT
    value: CHANGEME
- mavenCMD: '-e clean test'
- shellCMD: 'sudo apt-get update'
+mavenCMD: '-e clean test'
+shellCMD: 'sudo apt-get update'
