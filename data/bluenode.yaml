@@ -1,13 +1,15 @@
-label : 'centos_7_0'
-giturl : 'git://github.com/quidryan/aws-sdk-test.git'
-parameters :
- - type: string
-   name: NBC_APPNAME
-   value: CHANGEME
- - type: string
-   name: NBC_BUILDID
-   value: CHANGEME
- - type: string
-   name: NBC_ARTIFACT
-   value: CHANGEME
- mavenCMD: '-e clean test'
+project:
+  name: 'First-Job'
+  description: 'Created by DSL Seed-Job'
+  parameters :
+   - type: string
+     name: NBC_APPNAME
+     value: CHANGEME
+   - type: string
+     name: NBC_BUILDID
+     value: CHANGEME
+   - type: string
+     name: NBC_ARTIFACT
+     value: CHANGEME
+  mavenCMD: '-e clean test'
+  shellCMD: 'sudo apt-get update'
