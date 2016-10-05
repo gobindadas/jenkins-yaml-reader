@@ -1,6 +1,7 @@
 name: 'First-Job'
 description: 'Created by DSL Seed-Job'
 gitUrl : 'https://github.com/gobindadas/GroovyCore.git'
+branchName: 'master'
 parameters :
  - type: string
    name: NBC_APPNAME
@@ -20,3 +21,4 @@ parameters :
    description: 'This job is for Dev build or not.'
 mavenCMD: 'clean install'
 shellCMD: 'sudo apt-get update'
+assignedNode: 'Supercatalyst'
