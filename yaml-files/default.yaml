@@ -5,11 +5,18 @@ parameters :
  - type: string
    name: NBC_APPNAME
    value: CHANGEME
+   description: 'Application name'
  - type: string
    name: NBC_BUILDID
    value: CHANGEME
+   description: 'Job build Id'
  - type: string
    name: NBC_ARTIFACT
    value: CHANGEME
-mavenCMD: '-e clean test'
+   description: 'Application artifact Id'
+ - type: boolean
+   name: DEV
+   value: true
+   description: 'This job is for Dev build or not.'
+mavenCMD: 'clean install'
 shellCMD: 'sudo apt-get update'
