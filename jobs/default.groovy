@@ -9,31 +9,35 @@ def configyaml = build.workspace.toString() + "/yaml-files/"+fileName;
 def iStream = streamFileFromWorkspace(configyaml);
 def jobSettings = yml.load(iStream);
 
-  // Create job with given name
+// Create Job from loaded yaml file
   job(jobName) {
     if(jobSettings.description){
       description(jobSettings.description)
     }
-    scm {
+    if(jobSettings.gitUrl){
+      scm {
         git(jobSettings.gitUrl,jobSettings.branchName)
+      }
     }
+    
     if(jobSettings.parameters && jobSettings.parameters.length){
-    (jobSettings.parameters.each { param->
-      
-      switch(param.type){
-        case 'string':
-         parameters {
-            stringParam(param.name, param.value, param.description)
-         }
-        break;
-        case 'boolean':
-         parameters {
-            booleanParam(param.name, param.value, param.description)
-         }
-        break;
-      }     
-    })
-  }
+      (jobSettings.parameters.each { param->
+        
+        switch(param.type){
+          case 'string':
+           parameters {
+              stringParam(param.name, param.value, param.description)
+           }
+          break;
+          case 'boolean':
+           parameters {
+              booleanParam(param.name, param.value, param.description)
+           }
+          break;
+          
+        }     
+      })
+    }
     if(jobSettings.mavenCMD){
       steps{
         maven(jobSettings.mavenCMD)
@@ -59,6 +63,11 @@ def jobSettings = yml.load(iStream);
     if(jobSettings.schedule){
       triggers {
         scm(jobSettings.schedule)
+      }
+    }
+    if(jobSettings.childProject){
+      publishers {
+        downstream(jobSettings.childProject)
       }
     }
   }

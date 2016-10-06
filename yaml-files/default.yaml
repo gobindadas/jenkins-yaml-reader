@@ -13,6 +13,7 @@ parameters :
    description: 'This job is for Dev build or not.'
 schedule: 'H/5 * * * *'
 mavenCMD: 'clean install'
-shellCMD: "echo 'Execute above script to install required software.' \n sudo apt-get update \n sudo apt-get install nodejs \n sudo apt-get install npm \n sudo apt-get install mongodb \n sudo apt-get update"
+shellCMD: "echo 'Execute script to install required software.' \n sudo apt-get update \n sudo apt-get install nodejs \n sudo apt-get install npm \n sudo apt-get install mongodb \n sudo apt-get update"
 assignedNode: 'BuildServer'
 recipients: 'gobinda.das@relevancelab.com'
+childProject: 'Child-Job'
